@@ -174,8 +174,8 @@ public class AST {
 	}
 
 	public static class NotNode extends Node{
-		Node n;
-		NotNode(Node n) {this.n = n;}
+		Node inner;
+		NotNode(Node n) {this.inner = n;}
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
 	}

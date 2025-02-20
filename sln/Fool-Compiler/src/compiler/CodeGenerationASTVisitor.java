@@ -188,6 +188,27 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 	}
 
 	@Override
+	public String visitNode(NotNode n){
+		if(print) printNode(n);
+		String ok = freshLabel();
+		String ko = freshLabel();
+		String end = freshLabel();
+		return nlJoin(
+				visit(n.inner),
+				"push 1",
+				"beq "+ko, //1 == 1 mi pusha 0
+				"b "+ok, //altrimenti 0 == 1 mi pusha 1
+				ko+":", //difatti invertendo il valore sullo stack
+				"push 0",
+				"b "+ end,
+				ok+":",
+				"push 1",
+				"b "+end,
+				end+":"
+		);
+	}
+
+	@Override
 	public String visitNode(CallNode n) {
 		if (print) printNode(n,n.id);
 		String argCode = null, getAR = null;
