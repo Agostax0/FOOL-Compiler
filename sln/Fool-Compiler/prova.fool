@@ -1,4 +1,4 @@
 let
     var y:int = 10;
 in
-    print( ((!false) && true) );
+    print( (!true) || false );

@@ -171,7 +171,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		if (print) printNode(n);
 		TypeNode l = visit(n.left);
 		TypeNode r = visit(n.right);
-		if ( (isSubtype(l, new BoolTypeNode()) || isSubtype(r, new BoolTypeNode())) )
+		if ( ( !(isSubtype(l, new BoolTypeNode())) ) || !(isSubtype(r, new BoolTypeNode())))
 			throw new TypeException("Non boolean in OR comparison",n.getLine());
 		return new BoolTypeNode();
 	}
