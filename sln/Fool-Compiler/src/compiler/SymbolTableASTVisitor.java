@@ -5,6 +5,8 @@ import compiler.AST.*;
 import compiler.exc.*;
 import compiler.lib.*;
 
+import javax.xml.transform.stream.StreamSource;
+
 public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 	private List<Map<String, STentry>> symTable = new ArrayList<>();
@@ -29,6 +31,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		Map<String, STentry> hm = new HashMap<>();
 		symTable.add(hm);
 		for (Node dec : n.declist) visit(dec);
+		for (Node cla: n.classList) { /*System.out.println("class: " + cla);*/ visit(cla); }
 		visit(n.exp);
 		symTable.remove(0);
 		return null;
@@ -227,6 +230,24 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	@Override
 	public Void visitNode(ClassNode n){
 		if(print) printNode(n);
+		Map<String, STentry> hm = symTable.get(0); //0 globale
+
+		List<TypeNode> allFields = new ArrayList<>();
+		for(FieldNode fn : n.fields) allFields.add(fn.type);
+		List<TypeNode> allMethods = new ArrayList<>();
+		for(MethodNode mn : n.methods) allFields.add(mn.type);
+		STentry entry = new STentry(nestingLevel, new ClassTypeNode(allFields, allMethods), decOffset);
+		if(hm.put(n.id, entry) != null){
+			System.out.println("Class id " + n.id + " at line "+ n.getLine() +" already declared");
+			stErrors++;
+		}
+		//nuova hashmap per la classe
+		int tempNesting = 1;
+		Map<String, STentry> hmn = new HashMap<>();
+		symTable.add(hmn);
+		int prevNLDecOffset=decOffset; // stores counter for offset of declarations at previous nesting level
+		decOffset=-2;
+
 		return null;
 	}
 

@@ -195,6 +195,8 @@ public class AST {
 			this.id = id;
 		}
 
+		String getId(){return this.id;}
+
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
@@ -299,10 +301,16 @@ public class AST {
 		}
 	}
 
-	public static class ClassTypeNode extends Node{
+	public static class ClassTypeNode extends TypeNode{
 
-		public ClassTypeNode() {
+		List<TypeNode> allFields = new ArrayList<>();
+		List<TypeNode> allMethods = new ArrayList<>();
+
+		public ClassTypeNode(List<TypeNode> allMethods, List<TypeNode> allFields) {
+			this.allMethods = allMethods;
+			this.allFields = allFields;
 		}
+
 
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
