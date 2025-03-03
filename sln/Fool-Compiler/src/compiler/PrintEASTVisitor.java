@@ -26,7 +26,7 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void,VoidException> {
 	@Override
 	public Void visitNode(FunNode n) {
 		printNode(n,n.id);
-		visit(n.retType);
+		visit(n.getType());
 		for (ParNode par : n.parlist) visit(par);
 		for (Node dec : n.declist) visit(dec);
 		visit(n.exp);

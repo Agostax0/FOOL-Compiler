@@ -51,7 +51,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 			} catch (TypeException e) {
 				System.out.println("Type checking error in a declaration: " + e.text);
 			}
-		if ( !isSubtype(visit(n.exp),ckvisit(n.retType)) ) //check
+		if ( !isSubtype(visit(n.exp),ckvisit(n.getType())) ) //check
 			throw new TypeException("Wrong return type for function " + n.id,n.getLine());
 		return null;
 	}

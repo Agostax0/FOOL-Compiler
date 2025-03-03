@@ -1,7 +1,8 @@
 let
 
-    class Persona(eta:int){
-        fun getEta:int(x:int) eta;
+    class Persona(eta:int, id:int){
+        fun getEta:int(x:int) eta+1;
+        fun getId:int(d:bool) id;
     }
 
 

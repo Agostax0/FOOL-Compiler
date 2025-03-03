@@ -244,7 +244,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
 	@Override
 	public Node visitCldec(CldecContext c){
-		if(print) printVarAndProdName(c);
+		if(print) printVarAndProdName(c); //c.ID().forEach(it -> System.out.println(it));
 		List<FieldNode> fields = new ArrayList<>();
 		List<MethodNode> methods = new ArrayList<>();
 		String id = c.ID(0).getText();
@@ -297,8 +297,4 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		Node n = new ClassCallNode();
 		return n;
 	}
-
-
-
-
 }
