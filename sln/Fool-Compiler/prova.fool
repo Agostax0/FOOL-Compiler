@@ -1,4 +1,12 @@
 let
-    var y:int = 10;
+
+    class Persona(eta:int){
+        fun getEta:int(x:int) eta;
+    }
+
+
+    var prova: int = 0;
+
+    /* var p:Persona = new Persona(25); */
 in
-    print( (!true) || false );
+    print( 10 /* p.getEta()*/ );
