@@ -46,9 +46,11 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitLetInProg(LetInProgContext c) {
 		if (print) printVarAndProdName(c);
+		List<Node> cl = new ArrayList<>();
 		List<Node> declist = new ArrayList<>();
 		for (DecContext dec : c.dec()) declist.add(visit(dec));
-		return new ProgLetInNode(declist, visit(c.exp()));
+		for (CldecContext clDec: c.cldec()) cl.add(visit(clDec));
+		return new ProgLetInNode(cl, declist, visit(c.exp()));
 	}
 
 	@Override
@@ -239,4 +241,64 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		n.setLine(c.ID().getSymbol().getLine());
 		return n;
 	}
+
+	@Override
+	public Node visitCldec(CldecContext c){
+		if(print) printVarAndProdName(c);
+		List<FieldNode> fields = new ArrayList<>();
+		List<MethodNode> methods = new ArrayList<>();
+		String id = c.ID(0).getText();
+		for (int i = 1; i < c.ID().size(); i++){
+			FieldNode fn = new FieldNode(c.ID(i).getText(), (TypeNode) visit(c.type(i)));
+			fn.setLine(c.ID(i).getSymbol().getLine());
+			fields.add(fn);
+		}
+		for(MethdecContext methdec : c.methdec()) methods.add((MethodNode) visit(methdec));
+
+		Node n = null;
+		if(c.ID().size() > 0){
+			n = new ClassNode(fields, methods, id);
+			n.setLine(c.CLASS().getSymbol().getLine());
+		}
+		return n;
+	}
+
+	@Override
+	public Node visitMethdec(MethdecContext c){
+		if(print) printVarAndProdName(c);
+		List<ParNode> parList = new ArrayList<>();
+		String id = c.ID(0).getText();
+		TypeNode retType = (TypeNode) visit(c.type(0));
+		for(int i = 1; i < c.ID().size(); i++){
+			ParNode parNode = new ParNode(c.ID(i).getText(), (TypeNode) visit(c.type(i)));
+			parNode.setLine(c.ID(i).getSymbol().getLine());
+			parList.add(parNode);
+		}
+		List<Node> decList = new ArrayList<>();
+		for(DecContext dec : c.dec()) decList.add(visit(dec));
+		Node n = null;
+		if(c.ID().size() > 0){
+			n = new MethodNode(id, retType, parList, decList, visit(c.exp()));
+			n.setLine(c.FUN().getSymbol().getLine());
+		}
+		return n;
+	}
+
+	@Override
+	public Node visitNew(NewContext c){
+		if(print) printVarAndProdName(c);
+		Node n = new NewNode();
+		return n;
+	}
+
+	@Override
+	public Node visitDotCall(DotCallContext c){
+		if(print) printVarAndProdName(c);
+		Node n = new ClassCallNode();
+		return n;
+	}
+
+
+
+
 }
