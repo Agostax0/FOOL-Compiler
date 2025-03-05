@@ -218,7 +218,10 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void,VoidException> {
 
 	@Override
 	public Void visitNode(MethodNode n){
-		printNode(n);
+		printNode(n, n.id);
+		for(var par : n.parList) visit(par);
+		for(var dec : n.decList) visit(dec);
+		visit(n.type,"->");
 		return null;
 	}
 
