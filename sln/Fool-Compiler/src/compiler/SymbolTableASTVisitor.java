@@ -231,8 +231,8 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	@Override
 	public Void visitNode(ClassNode n){
 		if(print) printNode(n);
-		System.out.println("bef sym" + symTable);
-		System.out.println("bef class" + classTable);
+//		System.out.println("bef sym" + symTable);
+//		System.out.println("bef class" + classTable);
 
 		final int globalNestingLevel = 0;
 		Map<String, STentry> hm = symTable.get(globalNestingLevel);
@@ -257,7 +257,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 		symTable.add(virtualTable);
 		nestingLevel++; //dovrebbe essere 1
-		if(nestingLevel != 1) System.out.println("Wrong nesting level: per classe:" + n.id + " a riga: " + n.getLine());
+		//if(nestingLevel != 1) System.out.println("Wrong nesting level: per classe:" + n.id + " a riga: " + n.getLine());
 
 
 		//PARAMETRI
@@ -271,7 +271,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 		int fieldsOffset = -1;
 		for(var uniqField : uniqFields){
-			visitNode(uniqField);
+			visit(uniqField);
 
 			STentry fieldEntry = new STentry(nestingLevel, uniqField.type, fieldsOffset--); //il primo lo mette in posizione -1
 
@@ -288,6 +288,19 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 					stErrors++;
 				}
 		);
+
+//		final int prevOffset = decOffset;
+//		decOffset = 0;
+//		for(var uniqMethod : uniqMethods){
+//			visit(uniqMethod);
+//
+//			var methodEntry = symTable.get(nestingLevel).get(uniqMethod.id).type;
+//
+//			ctn.allMethods.add(, methodEntry);
+//		}
+//
+
+
 
 
 		System.out.println("aft sym" + symTable);

@@ -5,6 +5,7 @@ let
         fun getId:int(d:bool) id;
     }
 
+
     class Persona2(b:bool, i:int){
 
     }
