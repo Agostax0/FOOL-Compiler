@@ -249,7 +249,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		List<MethodNode> methods = new ArrayList<>();
 		String id = c.ID(0).getText();
 		for (int i = 1; i < c.ID().size(); i++){
-			FieldNode fn = new FieldNode(c.ID(i).getText(), (TypeNode) visit(c.type(i)));
+			FieldNode fn = new FieldNode(c.ID(i).getText(), (TypeNode) visit(c.type(i - 1)));
 			fn.setLine(c.ID(i).getSymbol().getLine());
 			fields.add(fn);
 		}

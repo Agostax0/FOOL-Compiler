@@ -181,9 +181,15 @@ public class AST {
 		AndNode(Node l, Node r) {left = l; right = r;}
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
 	}
 
-	public static class ClassNode extends Node{
+	public static abstract class DecNode extends Node{
+		protected TypeNode type;
+		public TypeNode getType(){return type;}
+	}
+
+	public static class ClassNode extends DecNode{
 
 		String id;
 		List<FieldNode> fields = new ArrayList<>();
@@ -195,27 +201,20 @@ public class AST {
 			this.id = id;
 		}
 
-		String getId(){return this.id;}
-
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
 		}
-	}
 
-	public static class FieldNode extends Node{
+	}
+	public static class FieldNode extends DecNode{
 		String id;
-		TypeNode type;
-		FieldNode(String name, TypeNode type){this.id = name; this.type = type;}
+		FieldNode(String name, TypeNode type){this.id = name; type = type;}
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
 		}
-	}
 
-	private static abstract class DecNode extends Node{
-		protected TypeNode type;
-		TypeNode getType(){return type;}
 	}
 
 	public static class FunNode extends DecNode {
@@ -252,7 +251,7 @@ public class AST {
 		List<ParNode> parList;
 		List<Node> decList;
 		Node exp;
-
+		int offset = 0;
 		public MethodNode(String id, TypeNode retType, List<ParNode> parList, List<Node> decList, Node exp) {
 			this.id = id;
 			type = retType;

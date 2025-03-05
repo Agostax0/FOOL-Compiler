@@ -1,6 +1,6 @@
 let
 
-    class Persona(eta:int, id:int){
+    class Persona(eta:int, id:int, b:bool){
         fun getEta:int(x:int) eta+1;
         fun getId:int(d:bool) id;
     }
@@ -10,12 +10,13 @@ let
 
     }
 
+    /*
     fun f:bool(x:int)
         let var y:int = x + 1;
         in (y==10);
 
     var prova: int = 0;
-
+    */
     /* var p:Persona = new Persona(25); */
 in
     print( 10 /* p.getEta()*/ );
