@@ -10,6 +10,7 @@ import javax.xml.transform.stream.StreamSource;
 public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 	private List<Map<String, STentry>> symTable = new ArrayList<>();
+	private Map<String, Map<String, STentry>> classTable = new HashMap<>();
 	private int nestingLevel=0; // current nesting level
 	private int decOffset=-2; // counter for offset of local declarations at current nesting level
 	int stErrors=0;
@@ -230,24 +231,67 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	@Override
 	public Void visitNode(ClassNode n){
 		if(print) printNode(n);
-		Map<String, STentry> hm = symTable.get(0); //0 globale
+		System.out.println("bef sym" + symTable);
+		System.out.println("bef class" + classTable);
 
-		List<TypeNode> allFields = new ArrayList<>();
-		for(FieldNode fn : n.fields) allFields.add(fn.type);
-		List<TypeNode> allMethods = new ArrayList<>();
-		for(MethodNode mn : n.methods) allFields.add(mn.type);
-		STentry entry = new STentry(nestingLevel, new ClassTypeNode(allFields, allMethods), decOffset);
+		final int globalNestingLevel = 0;
+		Map<String, STentry> hm = symTable.get(globalNestingLevel);
+		ClassTypeNode ctn = new ClassTypeNode(
+				new ArrayList<>(), //allFields
+				new ArrayList<>()  //allMethods
+		);
+		STentry entry = new STentry(globalNestingLevel, ctn, decOffset--);
+
 		if(hm.put(n.id, entry) != null){
 			System.out.println("Class id " + n.id + " at line "+ n.getLine() +" already declared");
 			stErrors++;
 		}
-		//nuova hashmap per la classe
-		int tempNesting = 1;
-		Map<String, STentry> hmn = new HashMap<>();
-		symTable.add(hmn);
-		int prevNLDecOffset=decOffset; // stores counter for offset of declarations at previous nesting level
-		decOffset=-2;
 
+		//info per la class table
+
+		Map<String, STentry> virtualTable = new HashMap<>();
+		if(classTable.put(n.id, virtualTable) != null){
+			System.out.println("Class table id " + n.id + " at line "+ n.getLine() +" already declared");
+			stErrors++;
+		}
+
+		symTable.add(virtualTable);
+		nestingLevel++; //dovrebbe essere 1
+		if(nestingLevel != 1) System.out.println("Wrong nesting level: per classe:" + n.id + " a riga: " + n.getLine());
+
+
+		//PARAMETRI
+		Set<FieldNode> uniqFields = new HashSet<>();
+		n.fields.stream().filter(el -> !uniqFields.add(el)).forEach(
+				duplicate -> {
+					System.out.println("Par id " + duplicate.id + " at line "+ n.getLine() +" already declared");
+					stErrors++;
+				}
+		);
+
+		int fieldsOffset = -1;
+		for(var uniqField : uniqFields){
+			visitNode(uniqField);
+
+			STentry fieldEntry = new STentry(nestingLevel, uniqField.type, fieldsOffset--); //il primo lo mette in posizione -1
+
+			ctn.allFields.add(fieldEntry.offset, fieldEntry.type);
+
+			virtualTable.put(uniqField.id, fieldEntry);
+		}
+
+		//METODI
+		Set<MethodNode> uniqMethods = new HashSet<>();
+		n.methods.stream().filter(el -> !uniqMethods.add(el)).forEach(
+				duplicate -> {
+					System.out.println("Method id " + duplicate.id + " at line "+ n.getLine() +" already declared");
+					stErrors++;
+				}
+		);
+
+
+		System.out.println("aft sym" + symTable);
+		System.out.println("aft class" + classTable);
 		return null;
 	}
 
