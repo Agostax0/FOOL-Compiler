@@ -275,7 +275,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 			STentry fieldEntry = new STentry(nestingLevel, uniqField.type, fieldsOffset--); //il primo lo mette in posizione -1
 
-			ctn.allFields.add(fieldEntry.offset, fieldEntry.type);
+			ctn.allFields.add(-fieldEntry.offset -1, fieldEntry.type);
 
 			virtualTable.put(uniqField.id, fieldEntry);
 		}
