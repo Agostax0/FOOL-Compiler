@@ -205,7 +205,7 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void,VoidException> {
 	public Void visitNode(ClassNode n){
 		printNode(n, n.id);
 		for(var field : n.fields) visit(field);
-		for(var method : n.methods) visit(method, "meth: ");
+		for(var method : n.methods) visit(method);
 		return null;
 	}
 

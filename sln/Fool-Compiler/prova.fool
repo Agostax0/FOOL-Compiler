@@ -10,6 +10,9 @@ let
 
     }
 
+    fun f:bool(x:int)
+        let var y:int = x + 1;
+        in (y==10);
 
     var prova: int = 0;
 
