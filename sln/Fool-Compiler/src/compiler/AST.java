@@ -275,6 +275,24 @@ public class AST {
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o == null || getClass() != o.getClass()) return false;
+			ParNode parNode = (ParNode) o;
+			return Objects.equals(id, parNode.id) && Objects.equals(this.getType(), parNode.getType());
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(id);
+		}
+
+		@Override
+		public String toString() {
+			return '\'' + id + '\'' +
+					":" + type;
+		}
 	}
 
 	public static class VarNode extends DecNode {
@@ -309,6 +327,27 @@ public class AST {
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o == null || getClass() != o.getClass()) return false;
+			MethodNode that = (MethodNode) o;
+			return Objects.equals(id, that.id) && Objects.equals(parList, that.parList);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(id, parList);
+		}
+
+		@Override
+		public String toString() {
+			return "MethodNode{" +
+					"parList=" + parList +
+					", id='" + id + '\'' +
+					", type=" + type +
+					'}';
 		}
 	}
 
