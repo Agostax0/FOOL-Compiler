@@ -244,6 +244,11 @@ public class AST {
 		public int hashCode() {
 			return Objects.hashCode(id);
 		}
+
+		@Override
+		public String toString() {
+			return "id='" + id + '\'' + ", type=" + type;
+		}
 	}
 
 	public static class FunNode extends DecNode {
