@@ -267,8 +267,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 			}
 		}
 
-		System.out.println(uniqFields);
-
 		int fieldsOffset = -1;
 		for(var uniqField : uniqFields){
 			visit(uniqField);
@@ -281,13 +279,16 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		}
 
 		//METODI
-		Set<MethodNode> uniqMethods = new HashSet<>();
-		n.methods.stream().filter(el -> !uniqMethods.add(el)).forEach(
-				duplicate -> {
-					System.out.println("Method id " + duplicate.id + " at line "+ n.getLine() +" already declared");
-					stErrors++;
-				}
-		);
+		List<MethodNode> uniqMethods = new ArrayList<>();
+		for(var method : n.methods){
+			if(!uniqMethods.contains(method)){
+				uniqMethods.add(method);
+			}
+			else{
+				System.out.println("Method id " + method.id + " at line "+ n.getLine() +" already declared");
+				stErrors++;
+			}
+		}
 
 		final int prevOffset = decOffset;
 		decOffset = 0;

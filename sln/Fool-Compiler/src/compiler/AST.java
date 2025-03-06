@@ -280,7 +280,7 @@ public class AST {
 		public boolean equals(Object o) {
 			if (o == null || getClass() != o.getClass()) return false;
 			ParNode parNode = (ParNode) o;
-			return Objects.equals(id, parNode.id) && Objects.equals(this.getType(), parNode.getType());
+			return Objects.equals(id, parNode.id) && Objects.equals(this.getType().toString(), parNode.getType().toString());
 		}
 
 		@Override
@@ -333,7 +333,7 @@ public class AST {
 		public boolean equals(Object o) {
 			if (o == null || getClass() != o.getClass()) return false;
 			MethodNode that = (MethodNode) o;
-			return Objects.equals(id, that.id) && Objects.equals(parList, that.parList);
+			return Objects.equals(id, that.id) && parList.equals(that.parList);
 		}
 
 		@Override
@@ -398,6 +398,11 @@ public class AST {
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
+		}
+		
+		@Override
+		public String toString() {
+			return "class";
 		}
 	}
 
