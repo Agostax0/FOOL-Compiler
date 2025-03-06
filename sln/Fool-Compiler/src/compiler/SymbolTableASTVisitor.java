@@ -256,13 +256,18 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		nestingLevel++; //dovrebbe essere 1
 
 		//PARAMETRI
-		Set<FieldNode> uniqFields = new HashSet<>();
-		n.fields.stream().filter(el -> !uniqFields.add(el)).forEach(
-				duplicate -> {
-					System.out.println("Par id " + duplicate.id + ":" + duplicate.type.toString() + " at line "+ n.getLine() +" already declared");
-					stErrors++;
-				}
-		);
+		List<FieldNode> uniqFields = new ArrayList<>();
+		for(var field : n.fields){
+			if(!uniqFields.contains(field)){
+				uniqFields.add(field);
+			}
+			else{
+				System.out.println("Par id " + field.id + ":" + field.type.toString() + " at line "+ n.getLine() +" already declared");
+				stErrors++;
+			}
+		}
+
+		System.out.println(uniqFields);
 
 		int fieldsOffset = -1;
 		for(var uniqField : uniqFields){
