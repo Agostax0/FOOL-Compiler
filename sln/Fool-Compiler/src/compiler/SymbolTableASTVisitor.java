@@ -231,8 +231,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	@Override
 	public Void visitNode(ClassNode n){
 		if(print) printNode(n);
-//		System.out.println("bef sym" + symTable);
-//		System.out.println("bef class" + classTable);
 
 		ClassTypeNode ctn = new ClassTypeNode(
 				new ArrayList<>(), //allFields
@@ -261,7 +259,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		Set<FieldNode> uniqFields = new HashSet<>();
 		n.fields.stream().filter(el -> !uniqFields.add(el)).forEach(
 				duplicate -> {
-					System.out.println("Par id " + duplicate.id + " at line "+ n.getLine() +" already declared");
+					System.out.println("Par id " + duplicate.id + ":" + duplicate.type.toString() + " at line "+ n.getLine() +" already declared");
 					stErrors++;
 				}
 		);
@@ -299,9 +297,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 		decOffset=prevOffset;
 		symTable.remove(nestingLevel--);
-
-		System.out.println("aft sym" + symTable);
-		System.out.println("aft class" + classTable);
 		return null;
 	}
 

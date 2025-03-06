@@ -120,12 +120,22 @@ public class AST {
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+		@Override
+		public String toString() {
+			return "bool";
+		}
 	}
 
 	public static class IntTypeNode extends TypeNode {
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+		@Override
+		public String toString() {
+			return "int";
+		}
 	}
 
 	public static class GreaterEqualNode extends Node{
@@ -222,6 +232,18 @@ public class AST {
 			return visitor.visitNode(this);
 		}
 
+
+		@Override
+		public boolean equals(Object o) {
+			if (o == null || getClass() != o.getClass()) return false;
+			FieldNode fieldNode = (FieldNode) o;
+			return Objects.equals(id, fieldNode.id);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hashCode(id);
+		}
 	}
 
 	public static class FunNode extends DecNode {

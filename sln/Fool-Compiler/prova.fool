@@ -1,22 +1,12 @@
 let
 
-    class Persona(eta:int, id:int, b:bool){
+    class Persona(eta:int, id:int, b:bool, b:int, b:bool, b:bool, b:bool){
         fun getEta:int(x:int) eta+1;
         fun getId:int(d:bool) id;
     }
 
-/*
-    class Persona2(b:bool, i:int){
-
-    }
-*/
-    /*
-    fun f:bool(x:int)
-        let var y:int = x + 1;
-        in (y==10);
-
-/* var prova: int = 0; */
-    */
+    /* class Persona2(b:bool, i:int){ } */
+    /* var prova: int = 0; */
     /* var p:Persona = new Persona(25); */
 in
     print( 10 /* p.getEta()*/ );
