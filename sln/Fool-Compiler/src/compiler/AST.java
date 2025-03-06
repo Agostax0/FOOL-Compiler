@@ -186,7 +186,7 @@ public class AST {
 
 	public static abstract class DecNode extends Node{
 		protected TypeNode type;
-		public TypeNode getType(){return type;}
+		protected TypeNode getType(){return type;}
 	}
 
 	public static class ClassNode extends DecNode{
@@ -202,6 +202,9 @@ public class AST {
 		}
 
 		@Override
+		public TypeNode getType(){return this.type;}
+
+		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
 		}
@@ -209,7 +212,11 @@ public class AST {
 	}
 	public static class FieldNode extends DecNode{
 		String id;
-		FieldNode(String name, TypeNode type){this.id = name; type = type;}
+
+		@Override
+		public TypeNode getType(){return this.type;}
+
+		FieldNode(String name, TypeNode type){this.id = name; this.type = type;}
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
@@ -223,7 +230,10 @@ public class AST {
 		List<Node> declist;
 		Node exp;
 		FunNode(String i, TypeNode rt, List<ParNode> pl, List<Node> dl, Node e) {
-			id=i; type=rt; parlist=pl; declist=dl; exp=e;}
+			id=i; this.type=rt; parlist=pl; declist=dl; exp=e;}
+
+		@Override
+		public TypeNode getType(){return this.type;}
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
@@ -231,7 +241,10 @@ public class AST {
 
 	public static class ParNode extends DecNode {
 		String id;
-		ParNode(String i, TypeNode t) {id = i; type = t;}
+		ParNode(String i, TypeNode t) {id = i; this.type = t;}
+
+		@Override
+		public TypeNode getType(){return this.type;}
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
@@ -240,7 +253,10 @@ public class AST {
 	public static class VarNode extends DecNode {
 		String id;
 		Node exp;
-		VarNode(String i, TypeNode t, Node v) {id = i; type = t; exp = v;}
+		VarNode(String i, TypeNode t, Node v) {id = i; this.type = t; exp = v;}
+
+		@Override
+		public TypeNode getType(){return this.type;}
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
@@ -254,12 +270,14 @@ public class AST {
 		int offset = 0;
 		public MethodNode(String id, TypeNode retType, List<ParNode> parList, List<Node> decList, Node exp) {
 			this.id = id;
-			type = retType;
+			this.type = retType;
 			this.parList = parList;
 			this.decList = decList;
 			this.exp = exp;
 		}
 
+		@Override
+		public TypeNode getType(){return this.type;}
 
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
