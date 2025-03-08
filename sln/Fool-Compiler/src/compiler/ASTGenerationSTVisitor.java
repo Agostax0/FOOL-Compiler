@@ -296,7 +296,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
-	public Node visitDotCall(DotCallContext c){
+	public Node visitClassCall(ClassCallContext c){
 		if(print) printVarAndProdName(c);
 		Node n = new ClassCallNode();
 		return n;

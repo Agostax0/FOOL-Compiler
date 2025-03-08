@@ -47,7 +47,7 @@ exp     : exp (TIMES | DIV) exp #timesDiv
 	    | PRINT LPAR exp RPAR #print
         | ID #id
 	    | ID LPAR (exp (COMMA exp)* )? RPAR #call
-	    | ID DOT ID LPAR (exp (COMMA exp)* )? RPAR #dotCall
+	    | ID DOT ID LPAR (exp (COMMA exp)* )? RPAR #classCall
         ;
 
 
