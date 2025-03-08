@@ -364,7 +364,11 @@ public class AST {
 
 	public static class NewNode extends Node{
 
-		public NewNode() {
+		String classId;
+		List<Node> args = new ArrayList<>();
+		public NewNode(String id, List<Node> args) {
+			this.classId = id;
+			this.args = args;
 		}
 
 		@Override

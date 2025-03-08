@@ -1,12 +1,11 @@
 let
 
-    class Persona(eta:int, id:int, b:bool, b:int, b:bool, b:bool, b:bool){
+    class Persona(eta:int){
         fun getEta:int(x:int) eta+1;
-        fun getId:int(d:bool) id;
     }
 
     /* class Persona2(b:bool, i:int){ } */
     /* var prova: int = 0; */
-    /* var p:Persona = new Persona(25); */
+    var p: Persona = new Persona(25);
 in
     print( 10 /* p.getEta()*/ );

@@ -287,7 +287,11 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitNew(NewContext c){
 		if(print) printVarAndProdName(c);
-		Node n = new NewNode();
+		String classId = c.ID().getText();
+		List<Node> argsExp = new ArrayList<>();
+		for(var argExp : c.exp()){argsExp.add(visit(argExp));}
+		Node n = new NewNode(classId, argsExp);
+		n.setLine(c.ID().getSymbol().getLine());
 		return n;
 	}
 
