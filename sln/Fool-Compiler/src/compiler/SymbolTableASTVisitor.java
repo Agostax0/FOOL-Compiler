@@ -352,6 +352,19 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	}
 
 	@Override
+	public Void visitNode(NewNode n){
+		if(print) printNode(n);
+		if(!classTable.containsKey(n.classId)){
+			System.out.println("Class " + n.classId + " at line "+ n.getLine() +" not declared");
+			stErrors++;
+		}
+		int globalNestingLevel = 0;
+		n.entry = symTable.get(globalNestingLevel).get(n.classId);
+		n.args.forEach(this::visit);
+		return null;
+	}
+
+	@Override
 	public Void visitNode(ClassCallNode n){
 		if(print) printNode(n);
 		return null;
