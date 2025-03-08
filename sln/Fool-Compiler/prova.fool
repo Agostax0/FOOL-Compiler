@@ -4,8 +4,14 @@ let
         fun getEta:int(x:int) eta+1;
     }
 
+    fun x:int()
+    let
+        var y:int = 1;
+    in
+        print(y);
+
     /* class Persona2(b:bool, i:int){ } */
     /* var prova: int = 0; */
     var p: Persona = new Persona(25);
 in
-    print( 10 /* p.getEta()*/ );
+    print( p.getEta() );

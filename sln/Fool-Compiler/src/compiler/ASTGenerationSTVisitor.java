@@ -299,6 +299,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	public Node visitClassCall(ClassCallContext c){
 		if(print) printVarAndProdName(c);
 
+		//mancano degli argomenti IDclasse . IDmetodo
 		if(c.ID().size() != 2) return null;
 
 		String classId = c.ID(0).getText();
