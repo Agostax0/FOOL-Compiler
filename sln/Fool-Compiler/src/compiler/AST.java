@@ -353,7 +353,17 @@ public class AST {
 
 	public static class ClassCallNode extends Node{
 
-		public ClassCallNode() {
+		String classId;
+		String methodId;
+		List<Node> args;
+
+		STentry entry;
+		STentry methodEntry;
+
+		public ClassCallNode(String classId, String methodId, List<Node> args) {
+			this.classId = classId;
+			this.methodId = methodId;
+			this.args = args;
 		}
 
 		@Override
@@ -366,6 +376,8 @@ public class AST {
 
 		String classId;
 		List<Node> args = new ArrayList<>();
+		STentry entry;
+
 		public NewNode(String id, List<Node> args) {
 			this.classId = id;
 			this.args = args;
