@@ -302,15 +302,18 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		//mancano degli argomenti IDclasse . IDmetodo
 		if(c.ID().size() != 2) return null;
 
-		String classId = c.ID(0).getText();
-		String methodId = c.ID(1).getText();
+		String varName = c.ID(0).getText();
+		String methodName = c.ID(1).getText();
 
 		List<Node> args = new ArrayList<>();
 		for(var exp : c.exp()) args.add(visit(exp));
 
 
-		Node n = new ClassCallNode(classId,methodId, args);
+		Node n = new ClassCallNode(varName,methodName, args);
 		n.setLine(c.DOT().getSymbol().getLine());
+
+		System.out.println(n);
+
 		return n;
 	}
 }

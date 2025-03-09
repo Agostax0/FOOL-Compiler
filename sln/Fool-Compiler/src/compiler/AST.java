@@ -97,6 +97,13 @@ public class AST {
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+		@Override
+		public String toString() {
+			return "BoolNode{" +
+					"val=" + val +
+					'}';
+		}
 	}
 
 	public static class IntNode extends Node {
@@ -105,6 +112,13 @@ public class AST {
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+		@Override
+		public String toString() {
+			return "IntNode{" +
+					"val=" + val +
+					'}';
+		}
 	}
 
 	public static class ArrowTypeNode extends TypeNode {
@@ -353,22 +367,33 @@ public class AST {
 
 	public static class ClassCallNode extends Node{
 
-		String classId;
-		String methodId;
+		String varName;
+		String methodName;
 		List<Node> args;
 
 		STentry entry;
 		STentry methodEntry;
 
 		public ClassCallNode(String classId, String methodId, List<Node> args) {
-			this.classId = classId;
-			this.methodId = methodId;
+			this.varName = classId;
+			this.methodName = methodId;
 			this.args = args;
 		}
 
 		@Override
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
+		}
+
+		@Override
+		public String toString() {
+			return "ClassCallNode{" +
+					"varName='" + varName + '\'' +
+					", methodName='" + methodName + '\'' +
+					", args=" + args +
+					", entry=" + entry +
+					", methodEntry=" + methodEntry +
+					'}';
 		}
 	}
 

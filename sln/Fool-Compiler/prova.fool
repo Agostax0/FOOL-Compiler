@@ -15,4 +15,4 @@ let
     /* var prova: int = 0; */
     var p: Persona = new Persona(25);
 in
-    print( 10 /* p.getEta() */ );
+    print( 10 + p.getEta(1) );
