@@ -297,9 +297,9 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		for(var uniqMethod : uniqMethods){
 			visit(uniqMethod);
 
-			var methodEntry = symTable.get(nestingLevel).get(uniqMethod.id);
+			var methodEntry = symTable.get(nestingLevel).get(uniqMethod.id).type;
 
-			ctn.allMethods.add(uniqMethod.offset, methodEntry.type);
+			ctn.allMethods.add(uniqMethod.offset, methodEntry);
 		}
 
 		decOffset=prevOffset;
@@ -333,10 +333,10 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 		int prevOffset = decOffset;
 		decOffset = -2;
-		int parOffset = -1;
+		int parOffset = 1;
 
 		for(ParNode par : n.parList) {
-			if (methodTable.put(par.id, new STentry(nestingLevel,par.type,parOffset++)) != null) {
+			if (methodTable.put(par.id, new STentry(nestingLevel,par.type, parOffset++)) != null) {
 				System.out.println("Par id " + par.id + " at line "+ n.getLine() +" already declared");
 				stErrors++;
 			}
@@ -362,12 +362,22 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		int globalNestingLevel = 0;
 		n.entry = symTable.get(globalNestingLevel).get(n.classId);
 		n.args.forEach(this::visit);
+		System.out.println(symTable);
 		return null;
 	}
 
 	@Override
 	public Void visitNode(ClassCallNode n){
 		if(print) printNode(n);
+
+//		System.out.println(n);
+//		System.out.println(symTable);
+//		System.out.println(classTable);
+
+		//oggetto chiamato entry
+//		STentry classVarEntry = stLookup(n.varName);
+//		System.out.println(classVarEntry);
+
 		return null;
 	}
 

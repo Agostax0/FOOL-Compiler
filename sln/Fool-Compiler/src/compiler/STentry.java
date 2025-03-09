@@ -12,4 +12,13 @@ public class STentry implements Visitable {
 	public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {
 		return ((BaseEASTVisitor<S,E>) visitor).visitSTentry(this);
 	}
+
+	@Override
+	public String toString() {
+		return "STentry{" +
+				"nl=" + nl +
+				", type=" + type +
+				", offset=" + offset +
+				'}';
+	}
 }

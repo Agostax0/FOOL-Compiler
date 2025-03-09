@@ -233,4 +233,12 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void,VoidException> {
 		return null;
 	}
 
+	@Override
+	public Void visitNode(ClassCallNode n){
+		printNode(n,n.varName + "." + n.methodName);
+		//visit(n.entry.type);
+		for(var arg : n.args) visit(arg);
+		return null;
+	}
+
 }

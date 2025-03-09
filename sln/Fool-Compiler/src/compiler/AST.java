@@ -412,6 +412,15 @@ public class AST {
 		public <S, E extends Exception> S accept(BaseASTVisitor<S, E> visitor) throws E {
 			return visitor.visitNode(this);
 		}
+
+		@Override
+		public String toString() {
+			return "NewNode{" +
+					"classId='" + classId + '\'' +
+					", args=" + args +
+					", entry=" + entry +
+					'}';
+		}
 	}
 
 	public static class EmptyNode extends Node{

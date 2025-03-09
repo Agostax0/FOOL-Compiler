@@ -25,7 +25,7 @@ public class Test {
 
 
     	System.out.println("Generating AST.");
-    	ASTGenerationSTVisitor visitor = new ASTGenerationSTVisitor(true); // use true to visualize the ST
+    	ASTGenerationSTVisitor visitor = new ASTGenerationSTVisitor(false); // use true to visualize the ST
     	Node ast = visitor.visit(st);
     	System.out.println("");
 
@@ -34,9 +34,9 @@ public class Test {
     	symtableVisitor.visit(ast);
     	System.out.println("You had "+symtableVisitor.stErrors+" symbol table errors.\n");
 
-    	System.out.println("Visualizing Enriched AST.");
-    	new PrintEASTVisitor().visit(ast);
-    	System.out.println("");
+//    	System.out.println("Visualizing Enriched AST.");
+//    	new PrintEASTVisitor().visit(ast);
+//    	System.out.println("");
 
 //    	System.out.println("Checking Types.");
 //    	try {
