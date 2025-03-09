@@ -319,6 +319,15 @@ public class AST {
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+		@Override
+		public String toString() {
+			return "VarNode{" +
+					"id='" + id + '\'' +
+					", exp=" + exp +
+					", type=" + type +
+					'}';
+		}
 	}
 
 	public static class MethodNode extends DecNode{

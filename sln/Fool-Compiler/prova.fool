@@ -1,18 +1,16 @@
 let
 
     class Persona(eta:int){
-        fun getEta:int(x:int) eta+1;
+        fun sum:int(x:int) x+1;
     }
 
-    /*
-    fun x:int()
-    let
-        var y:int = 1;
-    in
-        print(y);
-    */
-    /* class Persona2(b:bool, i:int){ } */
-    /* var prova: int = 0; */
+    class Umano(){
+
+    }
+
+    var prova: int = 0;
     var p: Persona = new Persona(25);
+    /* var p2: Persona = new Persona(25);
+    var p3: Persona = new Persona(25); */
 in
-    print( 10 + p.getEta(1) );
+    print( p.sum(1) );

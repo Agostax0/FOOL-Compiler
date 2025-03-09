@@ -84,7 +84,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		if (print) printNode(n);
 		visit(n.exp);
 		Map<String, STentry> hm = symTable.get(nestingLevel);
-		STentry entry = new STentry(nestingLevel,n.type,decOffset--);
+		STentry entry = new STentry(nestingLevel,n.getType(),decOffset--);
 		//inserimento di ID nella symtable
 		if (hm.put(n.id, entry) != null) {
 			System.out.println("Var id " + n.id + " at line "+ n.getLine() +" already declared");
@@ -362,7 +362,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		int globalNestingLevel = 0;
 		n.entry = symTable.get(globalNestingLevel).get(n.classId);
 		n.args.forEach(this::visit);
-		System.out.println(symTable);
 		return null;
 	}
 
@@ -370,13 +369,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	public Void visitNode(ClassCallNode n){
 		if(print) printNode(n);
 
-//		System.out.println(n);
-//		System.out.println(symTable);
-//		System.out.println(classTable);
-
-		//oggetto chiamato entry
-//		STentry classVarEntry = stLookup(n.varName);
-//		System.out.println(classVarEntry);
 
 		return null;
 	}
