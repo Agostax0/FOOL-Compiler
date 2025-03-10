@@ -479,7 +479,7 @@ public class AST {
 		}
 	}
 
-	public static class EmptyTypeNode extends Node{
+	public static class EmptyTypeNode extends TypeNode{
 
 		public EmptyTypeNode() {
 		}

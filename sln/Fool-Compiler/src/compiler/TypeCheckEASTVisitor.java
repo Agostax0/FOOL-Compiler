@@ -180,7 +180,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	public TypeNode visitNode(CallNode n) throws TypeException {
 		if (print) printNode(n,n.id);
 		TypeNode t = visit(n.entry); // STentry visit
-		if ( !(t instanceof ArrowTypeNode) )
+		if ( !(t instanceof ArrowTypeNode))
 			throw new TypeException("Invocation of a non-function "+n.id,n.getLine());
 		ArrowTypeNode at = (ArrowTypeNode) t;
 		if ( !(at.parlist.size() == n.arglist.size()) )
@@ -197,6 +197,8 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		TypeNode t = visit(n.entry); // STentry visit
 		if (t instanceof ArrowTypeNode)
 			throw new TypeException("Wrong usage of function identifier " + n.id,n.getLine());
+		if(t instanceof ClassTypeNode)
+			throw new TypeException("Wrong usage of class identifier " + n.id,n.getLine());
 		return t;
 	}
 
@@ -240,6 +242,38 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	public TypeNode visitSTentry(STentry entry) throws TypeException {
 		if (print) printSTentry("type");
 		return ckvisit(entry.type); //check
+	}
+
+	//NON USATO
+	@Override
+	public TypeNode visitNode(FieldNode n){
+		if (print) printNode(n);
+		return null;
+	}
+
+	@Override
+	public TypeNode visitNode(MethodNode n) throws TypeException{
+		if (print) printNode(n,n.id);
+		for(Node dec : n.decList){
+			try {
+				visit(dec);
+			} catch (IncomplException e) {
+			} catch (TypeException e) {
+				System.out.println("Type checking error in a declaration: " + e.text);
+			}
+		}
+		if(!isSubtype(visit(n.exp), ckvisit(n.getType())))
+			throw new TypeException("Wrong return type for method " + n.id,n.getLine());
+		return null;
+	}
+
+	@Override
+	public TypeNode visitNode(ClassNode n) throws TypeException {
+		if (print) printNode(n, n.id);
+		for(var method : n.methods){
+			visit(method);
+		}
+		return null;
 	}
 
 }
