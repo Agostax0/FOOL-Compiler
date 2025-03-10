@@ -383,9 +383,13 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 				stErrors++;
 			}
 			else{
-				//method entry
+				//method entry or param entry
+				var varClassTable = classTable.get(((RefTypeNode) varEntry.type).classID);
+				n.methodEntry = varClassTable.get(n.methodName);
 			}
 		}
+
+		System.out.println(n);
 
 		return null;
 	}
