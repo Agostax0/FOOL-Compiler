@@ -81,7 +81,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 	@Override
 	public Void visitNode(VarNode n) {
-		System.out.println(symTable);
 		if (print) printNode(n);
 		visit(n.exp);
 		Map<String, STentry> hm = symTable.get(nestingLevel);
@@ -91,7 +90,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 			System.out.println("Var id " + n.id + " at line "+ n.getLine() +" already declared");
 			stErrors++;
 		}
-		System.out.println(symTable);
 		return null;
 	}
 
@@ -388,8 +386,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 				n.methodEntry = varClassTable.get(n.methodName);
 			}
 		}
-
-		System.out.println(n);
 
 		return null;
 	}

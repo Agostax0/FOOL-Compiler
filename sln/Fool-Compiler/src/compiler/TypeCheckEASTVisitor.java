@@ -3,6 +3,10 @@ package compiler;
 import compiler.AST.*;
 import compiler.exc.*;
 import compiler.lib.*;
+
+import java.lang.reflect.Type;
+import java.sql.Ref;
+
 import static compiler.lib.FOOLlib.*;
 
 //visitNode(n) fa il type checking di un Node n e ritorna:
@@ -271,8 +275,82 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	public TypeNode visitNode(ClassNode n) throws TypeException {
 		if (print) printNode(n, n.id);
 		for(var method : n.methods){
-			visit(method);
+			try {
+				visit(method);
+			} catch (IncomplException e) {
+			} catch (TypeException e) {
+				System.out.println("Class method error in a declaration: " + e.text);
+			}
 		}
+
+		for(var field : n.fields){
+			try {
+				visit(field);
+			} catch (IncomplException e) {
+			} catch (TypeException e) {
+				System.out.println("Class field error in a declaration: " + e.text);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public TypeNode visitNode(ClassCallNode n) throws TypeException{
+		if (print) printNode(n, n.varName + "." + n.methodName);
+		//non servirebbe perché lo controlla già SymbolTableVisitor
+		TypeNode t = visit(n.entry);
+		if( !(t instanceof RefTypeNode)){
+			throw new TypeException("Invocation of a non-class var"+n.varName,n.getLine());
+		}
+		TypeNode m = visit(n.methodEntry);
+		if( !(m instanceof ArrowTypeNode)){
+			throw new TypeException("Invocation of a non-class method"+n.varName,n.getLine());
+		}
+		//controllo sui parametri passati al metodo
+		if( ((ArrowTypeNode) m).parlist.size() != n.args.size()){
+			throw new TypeException("Wrong number of parameters in the invocation of "+n.methodName,n.getLine());
+		}
+
+		for(int i = 0; i < n.args.size(); i++){
+			var decElem = n.args.get(i);
+			var foundElem = ((ArrowTypeNode) m).parlist.get(i);
+
+			if( !(FOOLlib.isSubtype(visit(decElem), visit(foundElem))) )
+				throw new TypeException("Wrong type for "+decElem+"-th parameter in the invocation of "+n.methodName,n.getLine());
+		}
+
+		return ((ArrowTypeNode) m).ret;
+	}
+
+	@Override
+	public TypeNode visitNode(NewNode n) throws TypeException{
+		if (print) printNode(n);
+
+		if(!(n.entry.type instanceof ClassTypeNode)){
+			throw new TypeException("Called new keyword to a non-class " + n.classId,n.getLine());
+		}
+
+		var decArgs = n.args;
+		var foundArgs = ((ClassTypeNode) n.entry.type).allFields;
+
+		if(decArgs.size() != foundArgs.size())
+			throw new TypeException("Wrong number of parameters in the instantiation of "+n.classId,n.getLine());
+
+		for(int i = 0; i < decArgs.size(); i++){
+			var decArg = decArgs.get(i);
+			var foundArg = decArgs.get(i);
+
+			if( !(FOOLlib.isSubtype(visit(decArg), visit(foundArg))))
+				throw new TypeException("Wrong type for "+decArg+"-th parameter in the instantiation of "+n.classId,n.getLine());
+		}
+		return new RefTypeNode(n.classId);
+	}
+	@Override
+	public TypeNode visitNode(ClassTypeNode n) throws TypeException {
+		return null;
+	}
+	@Override
+	public TypeNode visitNode(RefTypeNode n) throws TypeException {
 		return null;
 	}
 
