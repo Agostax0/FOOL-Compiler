@@ -446,9 +446,9 @@ public class AST {
 	public static class ClassTypeNode extends TypeNode{
 
 		List<TypeNode> allFields = new ArrayList<>();
-		List<TypeNode> allMethods = new ArrayList<>();
+		List<ArrowTypeNode> allMethods = new ArrayList<>();
 
-		public ClassTypeNode(List<TypeNode> allMethods, List<TypeNode> allFields) {
+		public ClassTypeNode(List<ArrowTypeNode> allMethods, List<TypeNode> allFields) {
 			this.allMethods = allMethods;
 			this.allFields = allFields;
 		}
@@ -465,9 +465,12 @@ public class AST {
 		}
 	}
 
-	public static class RefTypeNode extends Node{
+	public static class RefTypeNode extends TypeNode{
 
-		public RefTypeNode() {
+		String classID;
+
+		public RefTypeNode(String classID) {
+			this.classID = classID;
 		}
 
 		@Override

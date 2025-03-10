@@ -25,7 +25,7 @@ public class Test {
 
 
     	System.out.println("Generating AST.");
-    	ASTGenerationSTVisitor visitor = new ASTGenerationSTVisitor(false); // use true to visualize the ST
+    	ASTGenerationSTVisitor visitor = new ASTGenerationSTVisitor(true); // use true to visualize the ST
     	Node ast = visitor.visit(st);
     	System.out.println("");
 

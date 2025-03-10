@@ -8,9 +8,11 @@ let
 
     }
 
-    var prova: int = 0;
     var p: Persona = new Persona(25);
-    /* var p2: Persona = new Persona(25);
-    var p3: Persona = new Persona(25); */
+    var u: Umano = new Umano();
+
+    /* var prova: int = 0; */
+    /* var p2: Persona = new Persona(25); */
+    /* var p3: Persona = new Persona(25); */
 in
     print( p.sum(1) );
