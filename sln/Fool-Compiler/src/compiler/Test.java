@@ -39,16 +39,17 @@ public class Test {
 //    	System.out.println("");
 
     	System.out.println("Checking Types.");
-    	try {
+//    	try {
     		TypeCheckEASTVisitor typeCheckVisitor = new TypeCheckEASTVisitor(true);
     		TypeNode mainType = typeCheckVisitor.visit(ast);
     		System.out.print("Type of main program expression is: ");
     		new PrintEASTVisitor().visit(mainType);
-    	} catch (IncomplException e) {
-    		System.out.println("Could not determine main program expression type due to errors detected before type checking.");
-    	} catch (TypeException e) {
-    		System.out.println("Type checking error in main program expression: "+e.text);
-    	}
+//    	}
+//		catch (IncomplException e) {
+//    		System.out.println("Could not determine main program expression type due to errors detected before type checking.");
+//    	} catch (TypeException e) {
+//    		System.out.println("Type checking error in main program expression: "+e.text);
+//    	}
     	System.out.println("You had "+FOOLlib.typeErrors+" type checking errors.\n");
 
     	int frontEndErrors = lexer.lexicalErrors+parser.getNumberOfSyntaxErrors()+symtableVisitor.stErrors+FOOLlib.typeErrors;

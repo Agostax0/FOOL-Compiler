@@ -248,10 +248,13 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		return ckvisit(entry.type); //check
 	}
 
-	//NON USATO
 	@Override
-	public TypeNode visitNode(FieldNode n){
+	public TypeNode visitNode(FieldNode n) throws TypeException{
 		if (print) printNode(n);
+		var decFieldType = visit(n.type);
+		var foundFieldType = ckvisit(n.type);
+		if( !isSubtype(decFieldType, foundFieldType))
+			throw new TypeException("Incompatible type for variable " + n.id,n.getLine());
 		return null;
 	}
 
@@ -298,10 +301,10 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	public TypeNode visitNode(ClassCallNode n) throws TypeException{
 		if (print) printNode(n, n.varName + "." + n.methodName);
 		//non servirebbe perché lo controlla già SymbolTableVisitor
-		TypeNode t = visit(n.entry);
-		if( !(t instanceof RefTypeNode)){
-			throw new TypeException("Invocation of a non-class var"+n.varName,n.getLine());
-		}
+//		TypeNode t = visit(n.entry);
+//		if( !(t instanceof RefTypeNode)){
+//			throw new TypeException("Invocation of a non-class var"+n.varName,n.getLine());
+//		}
 		TypeNode m = visit(n.methodEntry);
 		if( !(m instanceof ArrowTypeNode)){
 			throw new TypeException("Invocation of a non-class method"+n.varName,n.getLine());
@@ -352,6 +355,11 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	@Override
 	public TypeNode visitNode(RefTypeNode n) throws TypeException {
 		return null;
+	}
+	@Override
+	public TypeNode visitNode(EmptyNode n){
+		if (print) printNode(n);
+		return new EmptyTypeNode();
 	}
 
 }
