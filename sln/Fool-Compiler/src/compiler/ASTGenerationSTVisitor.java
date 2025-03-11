@@ -316,7 +316,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
 
 		Node n = new ClassCallNode(varName,methodName, args);
-		n.setLine(c.DOT().getSymbol().getLine());
+		n.setLine(c.ID(1).getSymbol().getLine());
 
 		//System.out.println(n);
 

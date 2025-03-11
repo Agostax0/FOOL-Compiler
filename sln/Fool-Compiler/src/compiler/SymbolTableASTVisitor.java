@@ -383,8 +383,30 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 			else{
 				//method entry or param entry
 				var varClassTable = classTable.get(((RefTypeNode) varEntry.type).classID);
-				n.methodEntry = varClassTable.get(n.methodName);
+
+				if(varClassTable == null){
+					System.out.println("Type of Var " + n.varName + " at line "+ n.getLine() + " is not a class");
+					stErrors++;
+				}
+				else{
+					n.entry = stLookup(n.varName);
+
+					STentry methodEntry = varClassTable.get(n.methodName);
+
+					if(methodEntry == null){
+						System.out.println("Method id " + n.methodName + " at line " + n.getLine() + " not declared in class " + ((RefTypeNode) n.entry.type).classID);
+						stErrors++;
+					}
+					else{
+						n.methodEntry = methodEntry;
+
+						n.args.forEach(this::visit);
+					}
+
+				}
+
 			}
+
 		}
 
 		return null;

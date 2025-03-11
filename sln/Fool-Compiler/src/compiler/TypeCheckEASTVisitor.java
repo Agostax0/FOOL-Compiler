@@ -300,17 +300,21 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	@Override
 	public TypeNode visitNode(ClassCallNode n) throws TypeException{
 		if (print) printNode(n, n.varName + "." + n.methodName);
+
 		//non servirebbe perché lo controlla già SymbolTableVisitor
-//		TypeNode t = visit(n.entry);
-//		if( !(t instanceof RefTypeNode)){
-//			throw new TypeException("Invocation of a non-class var"+n.varName,n.getLine());
-//		}
-		TypeNode m = visit(n.methodEntry);
-		if( !(m instanceof ArrowTypeNode)){
+		TypeNode t = visit(n.entry);
+		if( !(t instanceof RefTypeNode)){
+			throw new TypeException("Invocation of a non-class var"+n.varName,n.getLine());
+		}
+
+		if( !(n.methodEntry.type instanceof ArrowTypeNode)){
 			throw new TypeException("Invocation of a non-class method"+n.varName,n.getLine());
 		}
 		//controllo sui parametri passati al metodo
-		if( ((ArrowTypeNode) m).parlist.size() != n.args.size()){
+
+		ArrowTypeNode m = (ArrowTypeNode) n.methodEntry.type;
+
+		if( m.parlist.size() != n.args.size()){
 			throw new TypeException("Wrong number of parameters in the invocation of "+n.methodName,n.getLine());
 		}
 
@@ -318,7 +322,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 			var decElem = n.args.get(i);
 			var foundElem = ((ArrowTypeNode) m).parlist.get(i);
 
-			if( !(FOOLlib.isSubtype(visit(decElem), visit(foundElem))) )
+			if( !(FOOLlib.isSubtype(visit(decElem), foundElem )) )
 				throw new TypeException("Wrong type for "+decElem+"-th parameter in the invocation of "+n.methodName,n.getLine());
 		}
 
