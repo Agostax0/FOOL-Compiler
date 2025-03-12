@@ -45,17 +45,22 @@ instruction:
 	  	                      labelRef.put(i++,$l.text);} //pop two values and jump if they are equal
 	  | BRANCHLESSEQ l=LABEL {code[i++] = BRANCHLESSEQ; 
 	  	                      labelRef.put(i++,$l.text);} //pop two values and jump if the second one is less or equal to the first one
+
 	  | JS                ///pop one value from the stack:
 	  		              // copy the instruction pointer in the RA register and jump to the popped value    
 	  | LOADRA      ///push in the stack the content of the RA register   
-	  | STORERA     ///pop the top of the stack and copy it in the RA register     
+	  | STORERA     ///pop the top of the stack and copy it in the RA register
+
 	  | LOADTM               {code[i++] = LOADTM;} //push in the stack the content of the TM register    
-	  | STORETM              {code[i++] = STORETM;} //pop the top of the stack and copy it in the TM register    
+	  | STORETM              {code[i++] = STORETM;} //pop the top of the stack and copy it in the TM register
+
 	  | LOADFP      ///push in the stack the content of the FP register   
 	  | STOREFP     ///pop the top of the stack and copy it in the FP register    
-	  | COPYFP      ///copy in the FP register the current stack pointer    
+	  | COPYFP      ///copy in the FP register the current stack pointer
+
 	  | LOADHP      ///push in the stack the content of the HP register    
-	  | STOREHP     ///pop the top of the stack and copy it in the HP register    
+	  | STOREHP     ///pop the top of the stack and copy it in the HP register
+
 	  | PRINT                {code[i++] = PRINT;} //visualize the top of the stack without removing it   
 	  | HALT                 {code[i++] = HALT;} //terminate the execution    
       ;

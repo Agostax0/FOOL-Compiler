@@ -53,11 +53,11 @@ public class ExecuteVM {
                     v2=pop();
                     push(v2 - v1);
                     break;
-                case SVMParser.STOREW : //
+                case SVMParser.STOREW :
                     address = pop();
                     memory[address] = pop();
                     break;
-                case SVMParser.LOADW : //
+                case SVMParser.LOADW :
                     push(memory[pop()]);
                     break;
                 case SVMParser.BRANCH :
@@ -76,15 +76,15 @@ public class ExecuteVM {
                     v2=pop();
                     if (v2 <= v1) ip = address;
                     break;
-                case SVMParser.JS : //
+                case SVMParser.JS :
                     address = pop();
                     ra = ip;
                     ip = address;
                     break;
-                case SVMParser.STORERA : //
+                case SVMParser.STORERA :
                     ra=pop();
                     break;
-                case SVMParser.LOADRA : //
+                case SVMParser.LOADRA :
                     push(ra);
                     break;
                 case SVMParser.STORETM :
@@ -93,19 +93,19 @@ public class ExecuteVM {
                 case SVMParser.LOADTM :
                     push(tm);
                     break;
-                case SVMParser.LOADFP : //
+                case SVMParser.LOADFP :
                     push(fp);
                     break;
-                case SVMParser.STOREFP : //
+                case SVMParser.STOREFP :
                     fp=pop();
                     break;
-                case SVMParser.COPYFP : //
+                case SVMParser.COPYFP :
                     fp=sp;
                     break;
-                case SVMParser.STOREHP : //
+                case SVMParser.STOREHP :
                     hp=pop();
                     break;
-                case SVMParser.LOADHP : //
+                case SVMParser.LOADHP :
                     push(hp);
                     break;
                 case SVMParser.PRINT :
