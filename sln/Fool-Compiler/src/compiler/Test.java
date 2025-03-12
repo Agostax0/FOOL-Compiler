@@ -58,14 +58,14 @@ public class Test {
 
     	if ( frontEndErrors > 0) System.exit(1);
 
-//    	System.out.println("Generating code.");
-//    	String code = new CodeGenerationASTVisitor().visit(ast);
-//    	BufferedWriter out = new BufferedWriter(new FileWriter(fileName+".asm"));
-//    	out.write(code);
-//    	out.close();
-//
-//    	System.out.println("");
-//
+    	System.out.println("Generating code.");
+    	String code = new CodeGenerationASTVisitor().visit(ast);
+    	BufferedWriter out = new BufferedWriter(new FileWriter(fileName+".asm"));
+    	out.write(code);
+    	out.close();
+
+    	System.out.println("");
+
 //    	System.out.println("Assembling generated code.");
 //    	CharStream charsASM = CharStreams.fromFileName(fileName+".asm");
 //    	SVMLexer lexerASM = new SVMLexer(charsASM);

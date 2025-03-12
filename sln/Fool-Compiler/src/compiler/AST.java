@@ -336,6 +336,8 @@ public class AST {
 		List<Node> decList;
 		Node exp;
 		int offset = 0;
+		
+		String label;
 		public MethodNode(String id, TypeNode retType, List<ParNode> parList, List<Node> decList, Node exp) {
 			this.id = id;
 			this.type = retType;

@@ -3,12 +3,17 @@ package compiler;
 import compiler.AST.*;
 import compiler.lib.*;
 import compiler.exc.*;
+import compiler.svm.SVMLexer;
+
+import java.util.ArrayList;
+
 import static compiler.lib.FOOLlib.*;
 
 public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidException> {
 
 	CodeGenerationASTVisitor() {}
 	CodeGenerationASTVisitor(boolean debug) {super(false,debug);} //enables print for debugging
+
 
 	@Override
 	public String visitNode(ProgLetInNode n) {
@@ -303,4 +308,65 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		if (print) printNode(n,n.val.toString());
 		return "push "+n.val;
 	}
+
+	@Override
+	public String visitNode(ClassNode n){
+		/**
+		 * – ritorna codice che alloca su heap la dispatch tabledella classe e lascia il dispatch pointer sullo stack,
+		 * – ciò viene fatto come descritto in seguito
+		 */
+
+		var classDispatchTable = new ArrayList<String>();
+
+		for(var method : n.methods){
+			visit(method);
+
+			var methodLabelAssigned = method.label;
+			var methodOffset = method.offset;
+
+			classDispatchTable.add(methodOffset, methodLabelAssigned);
+		}
+
+		String instructions = "";
+
+		// metto valore di $hp sullo stack: sarà il dispatchpointer da ritornare alla fine
+
+		instructions = nlJoin("lhp"); ///push in the stack the content of the HP register
+
+		//creo sullo heap la Dispatch Table che ho costruito: la
+		//scorro dall’inizio alla fine
+
+		for(var label : classDispatchTable){
+			//per ciascuna etichetta: la memorizzo a indirizzo in $hp ed incremento $hp
+			instructions = nlJoin(
+					instructions,
+					//prendo l'indirizzo da $hp
+					"push "+label, //[label]
+					"lhp",		   //[hp, label]
+					"sw", ///pop two values: the second one is written at the memory address pointed by the first one [1:hp, 2:label]
+					"lhp",		   //[hp]
+					"push 1",      //[1, hp]
+					"add",		   //[hp+1]
+					"shp" ///pop the top of the stack and copy it in the HP register
+					);
+		}
+
+		return instructions;
+	}
+
+	@Override
+	public String visitNode(MethodNode n){
+
+
+		n.label = freshFunLabel();
+
+		/*
+		  genera il codice del metodo (invariato rispetto a
+		  funzioni) e lo inserisce in FOOLlib con putCode()
+		 */
+
+		return null;
+	}
+
+
 }
