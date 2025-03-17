@@ -311,6 +311,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 
 	@Override
 	public String visitNode(ClassNode n){
+		if (print) printNode(n);
 		/**
 		 * – ritorna codice che alloca su heap la dispatch tabledella classe e lascia il dispatch pointer sullo stack,
 		 * – ciò viene fatto come descritto in seguito
@@ -356,9 +357,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 
 	@Override
 	public String visitNode(MethodNode n){
-
-
-		n.label = freshFunLabel();
+		if (print) printNode(n);
 
 		/*
 		  genera il codice del metodo (invariato rispetto a
@@ -368,5 +367,31 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		return null;
 	}
 
+	@Override
+	public String visitNode(EmptyNode n){
+		if (print) printNode(n);
+		return "push -1";
+	}
+
+	@Override
+	public String visitNode(ClassCallNode n){
+		if (print) printNode(n);
+		String argCode = null, getAR = null;
+		for (int i=n.args.size()-1;i>=0;i--) argCode=nlJoin(argCode,visit(n.args.get(i)));
+		for (int i = 0;i<n.nestingLevel-n.entry.nl;i++) getAR=nlJoin(getAR,"lw");
+		String instructions =  nlJoin(
+				"lfp", // load Control Link (pointer to frame of function "id" caller)
+				argCode, // generate code for argument expressions in reversed order
+				"lfp", getAR, // retrieve address of frame containing "id" declaration
+				// by following the static chain (of Access Links)
+				"stm", // set $tm to popped value (with the aim of duplicating top of stack)
+				"ltm", // load Access Link (pointer to frame of function "id" declaration)
+				"ltm", // duplicate top of stack
+				"push "+n.entry.offset, "add", // compute address of "id" declaration
+				"lw", // load address of "id" function
+				"js"  // jump to popped address (saving address of subsequent instruction in $ra)
+		);
+		return instructions;
+	}
 
 }

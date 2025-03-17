@@ -385,6 +385,8 @@ public class AST {
 		STentry entry;
 		STentry methodEntry;
 
+		int nestingLevel;
+
 		public ClassCallNode(String classId, String methodId, List<Node> args) {
 			this.varName = classId;
 			this.methodName = methodId;
