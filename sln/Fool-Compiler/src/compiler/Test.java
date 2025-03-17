@@ -5,12 +5,14 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import compiler.lib.*;
 import compiler.exc.*;
-import compiler.svm.*;
+//import compiler.svm.*;
+import compiler.visualsvm.*;
+import java.nio.file.*;
 
 public class Test {
     public static void main(String[] args) throws Exception {
    			
-    	String fileName = "prova.fool";
+    	String fileName = "classe.fool";
 
     	CharStream chars = CharStreams.fromFileName(fileName);
     	FOOLLexer lexer = new FOOLLexer(chars);
@@ -66,21 +68,21 @@ public class Test {
 
     	System.out.println("");
 
-//    	System.out.println("Assembling generated code.");
-//    	CharStream charsASM = CharStreams.fromFileName(fileName+".asm");
-//    	SVMLexer lexerASM = new SVMLexer(charsASM);
-//    	CommonTokenStream tokensASM = new CommonTokenStream(lexerASM);
-//    	SVMParser parserASM = new SVMParser(tokensASM);
-//
-//    	parserASM.assembly();
-//
-//    	// needed only for debug
-//    	System.out.println("You had: "+lexerASM.lexicalErrors+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.\n");
-//    	if (lexerASM.lexicalErrors+parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
-//
-//    	System.out.println("Running generated code via Stack Virtual Machine.");
-//    	ExecuteVM vm = new ExecuteVM(parserASM.code);
-//    	vm.cpu();
+    	System.out.println("Assembling generated code.");
+    	CharStream charsASM = CharStreams.fromFileName(fileName+".asm");
+    	SVMLexer lexerASM = new SVMLexer(charsASM);
+    	CommonTokenStream tokensASM = new CommonTokenStream(lexerASM);
+    	SVMParser parserASM = new SVMParser(tokensASM);
+
+    	parserASM.assembly();
+
+    	// needed only for debug
+    	System.out.println("You had: "+lexerASM.lexicalErrors+" lexical errors and "+parserASM.getNumberOfSyntaxErrors()+" syntax errors.\n");
+    	if (lexerASM.lexicalErrors+parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
+
+    	System.out.println("Running generated code via Stack Virtual Machine.");
+		ExecuteVM vm = new ExecuteVM(parserASM.code,parserASM.sourceMap,Files.readAllLines(Paths.get(fileName+".asm")));
+    	vm.cpu();
     }
 }
 

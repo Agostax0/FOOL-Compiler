@@ -1,26 +1,2 @@
-let
 
-
-  class Persona (eta:int) {
-    fun getEta:int () eta;
-  }
-
-  var bagno:Persona = new Persona ( 23 );
-  var bingoli:Persona = new Persona ( 24 );
-
-  fun sum:int (n:int, m:int)
-    let
-        var x: int = 0;
-    in x + (n + m);
-
-
-in
-    print( sum(10,5) ) ;
-    /*
-    print(
-        sum(
-            bagno.getEta(),
-            bingoli.getEta()
-        )
-    );
-    */
+    print( 10 ) ;

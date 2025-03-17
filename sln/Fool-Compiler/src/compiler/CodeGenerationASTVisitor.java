@@ -3,7 +3,6 @@ package compiler;
 import compiler.AST.*;
 import compiler.lib.*;
 import compiler.exc.*;
-import compiler.svm.SVMLexer;
 
 import java.util.ArrayList;
 
