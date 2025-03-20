@@ -32,7 +32,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		Map<String, STentry> hm = new HashMap<>();
 		symTable.add(hm);
 		//prima le classi poi le fun/var così se dichiaro un oggetto ha gia la classe dentro la symboltable
-		for (Node cla: n.classList) { /*System.out.println("class: " + cla);*/ visit(cla); }
 		for (Node dec : n.declist) visit(dec);
 		visit(n.exp);
 		symTable.remove(0);

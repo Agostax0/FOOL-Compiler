@@ -1,2 +1,11 @@
+let
 
-    print( 10 ) ;
+    class Uomo(){}
+
+    fun get:int()
+    let
+        var x:int = 10;
+    in
+        10;
+in
+    print( get() ) ;

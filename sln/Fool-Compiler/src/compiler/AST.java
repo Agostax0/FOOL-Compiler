@@ -6,10 +6,9 @@ import compiler.lib.*;
 public class AST {
 
 	public static class ProgLetInNode extends Node {
-		List<Node> classList;
-		List<Node> declist;
+		List<DecNode> declist;
 		Node exp;
-		ProgLetInNode(List<Node> cl, List<Node> d, Node e) {classList = cl;declist = d; exp = e;}
+		ProgLetInNode(List<DecNode> d, Node e) {declist = d; exp = e;}
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
