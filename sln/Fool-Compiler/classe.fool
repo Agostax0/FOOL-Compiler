@@ -1,11 +1,17 @@
 let
+    class Test(){
+        fun test:int()
+        let
+            fun inc:int(a:int)
+            let
+                var z:int = 1;
+            in
+                a+z;
+            var z:int = 69;
+        in
+            inc(z);
+    }
 
-    class Uomo(){}
-
-    fun get:int()
-    let
-        var x:int = 10;
-    in
-        10;
+    var test:Test = new Test();
 in
-    print( get() ) ;
+    print( test.test() ) ;

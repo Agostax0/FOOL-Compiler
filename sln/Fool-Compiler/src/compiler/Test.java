@@ -12,7 +12,7 @@ import java.nio.file.*;
 public class Test {
     public static void main(String[] args) throws Exception {
    			
-    	String fileName = "classe.fool";
+    	String fileName = "quicksort.fool";
 
     	CharStream chars = CharStreams.fromFileName(fileName);
     	FOOLLexer lexer = new FOOLLexer(chars);
@@ -27,22 +27,22 @@ public class Test {
 
 
     	System.out.println("Generating AST.");
-    	ASTGenerationSTVisitor visitor = new ASTGenerationSTVisitor(false); // use true to visualize the ST
+    	ASTGenerationSTVisitor visitor = new ASTGenerationSTVisitor(true); // use true to visualize the ST
     	Node ast = visitor.visit(st);
     	System.out.println("");
 
     	System.out.println("Enriching AST via symbol table.");
-    	SymbolTableASTVisitor symtableVisitor = new SymbolTableASTVisitor(false);
+    	SymbolTableASTVisitor symtableVisitor = new SymbolTableASTVisitor(true);
     	symtableVisitor.visit(ast);
     	System.out.println("You had "+symtableVisitor.stErrors+" symbol table errors.\n");
 
-//    	System.out.println("Visualizing Enriched AST.");
-//    	new PrintEASTVisitor().visit(ast);
-//    	System.out.println("");
+    	System.out.println("Visualizing Enriched AST.");
+    	new PrintEASTVisitor().visit(ast);
+    	System.out.println("");
 
     	System.out.println("Checking Types.");
     	try {
-    		TypeCheckEASTVisitor typeCheckVisitor = new TypeCheckEASTVisitor(false);
+    		TypeCheckEASTVisitor typeCheckVisitor = new TypeCheckEASTVisitor(true);
     		TypeNode mainType = typeCheckVisitor.visit(ast);
     		System.out.print("Type of main program expression is: ");
     		new PrintEASTVisitor().visit(mainType);
@@ -61,7 +61,7 @@ public class Test {
     	if ( frontEndErrors > 0) System.exit(1);
 
     	System.out.println("Generating code.");
-    	String code = new CodeGenerationASTVisitor().visit(ast);
+    	String code = new CodeGenerationASTVisitor(true).visit(ast);
     	BufferedWriter out = new BufferedWriter(new FileWriter(fileName+".asm"));
     	out.write(code);
     	out.close();
@@ -81,6 +81,8 @@ public class Test {
     	if (lexerASM.lexicalErrors+parserASM.getNumberOfSyntaxErrors()>0) System.exit(1);
 
     	System.out.println("Running generated code via Stack Virtual Machine.");
+
+		//ExecuteVM vm = new ExecuteVM(parserASM.code);
 		ExecuteVM vm = new ExecuteVM(parserASM.code,parserASM.sourceMap,Files.readAllLines(Paths.get(fileName+".asm")));
     	vm.cpu();
     }

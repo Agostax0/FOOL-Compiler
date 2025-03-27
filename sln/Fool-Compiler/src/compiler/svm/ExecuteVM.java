@@ -1,5 +1,7 @@
 package compiler.svm;
 
+import compiler.svm.SVMParser;
+
 public class ExecuteVM {
 
     public static final int CODESIZE = 10000;

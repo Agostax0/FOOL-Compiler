@@ -541,4 +541,10 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		);
 	}
 
+	public String visitNode(EmptyTypeNode n){
+		System.out.println("NON CI DOVRESTI ENTRARE QUI");
+
+		return "";
+	}
+
 }

@@ -320,4 +320,10 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
 		return n;
 	}
+
+	@Override
+	public Node visitNull(NullContext c){
+		if(print) printVarAndProdName(c);
+		return new EmptyNode();
+	}
 }

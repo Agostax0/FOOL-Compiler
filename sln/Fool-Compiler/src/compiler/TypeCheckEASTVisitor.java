@@ -251,7 +251,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	@Override
 	public TypeNode visitNode(FieldNode n) throws TypeException{
 		if (print) printNode(n);
-		var decFieldType = visit(n.type);
+		var decFieldType = ckvisit(n.type);
 		var foundFieldType = ckvisit(n.type);
 		if( !isSubtype(decFieldType, foundFieldType))
 			throw new TypeException("Incompatible type for variable " + n.id,n.getLine());
@@ -364,6 +364,11 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	public TypeNode visitNode(EmptyNode n){
 		if (print) printNode(n);
 		return new EmptyTypeNode();
+	}
+
+	@Override
+	public TypeNode visitNode(EmptyTypeNode n) throws TypeException{
+		return null;
 	}
 
 }
