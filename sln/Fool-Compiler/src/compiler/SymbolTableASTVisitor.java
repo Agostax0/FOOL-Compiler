@@ -31,7 +31,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		if (print) printNode(n);
 		Map<String, STentry> hm = new HashMap<>();
 		symTable.add(hm);
-		//prima le classi poi le fun/var così se dichiaro un oggetto ha gia la classe dentro la symboltable
+		//prima le classi poi le fun/var così se dichiaro un oggetto ho gia' la classe dentro la symboltable
 		for (Node dec : n.declist) visit(dec);
 		visit(n.exp);
 		symTable.remove(0);
@@ -58,7 +58,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 			stErrors++;
 		}
 		//creare una nuova hashmap per la symTable
-		nestingLevel++;
+		nestingLevel++;//aumento il nesting level perche' mi trovo dentro la funzione
 		Map<String, STentry> hmn = new HashMap<>();
 		symTable.add(hmn);
 		int prevNLDecOffset=decOffset; // stores counter for offset of declarations at previous nesting level

@@ -46,7 +46,9 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	public Node visitLetInProg(LetInProgContext c) {
 		if (print) printVarAndProdName(c);
 		List<DecNode> declist = new ArrayList<>();
+		//dichiarazione delle classi
 		for (CldecContext clDec: c.cldec()) declist.add((DecNode) visit(clDec));
+		//dichiarazione di funzioni e parametri
 		for (DecContext dec : c.dec()) declist.add((DecNode) visit(dec));
 		return new ProgLetInNode(declist, visit(c.exp()));
 	}
@@ -61,7 +63,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		if(print) printVarAndProdName(c);
 
 		Node n = null;
-
+		//check se si tratta di moltiplicazione o divisione
 		if(c.TIMES() != null){
 			n = new TimesNode(visit(c.exp(0)), visit(c.exp(1)));
 			n.setLine(c.TIMES().getSymbol().getLine());
@@ -78,7 +80,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	public Node visitPlusMinus(PlusMinusContext c){
 		if(print) printVarAndProdName(c);
 		Node n = null;
-
+		//check se si tratta di somma o differenza
 		if(c.PLUS() != null){
 			n = new PlusNode(visit(c.exp(0)), visit(c.exp(1)));
 			n.setLine(c.PLUS().getSymbol().getLine());
@@ -96,7 +98,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	public Node visitComp(CompContext c){
 		if(print) printVarAndProdName(c);
 		Node n = null;
-
+		//check di quale comparazione si parla
 		if(c.EQ() != null){
 			n = new EqualNode(visit(c.exp(0)), visit(c.exp(1)));
 			n.setLine(c.EQ().getSymbol().getLine());
@@ -127,6 +129,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	public Node visitAndOr(AndOrContext c){
 		if(print) printVarAndProdName(c);
 		Node n = null;
+		//check se si tratta di and o or
 		if(c.AND() != null){
 			n = new AndNode(visit(c.exp(0)), visit(c.exp(1)));
 			n.setLine(c.AND().getSymbol().getLine());
@@ -161,7 +164,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		List<Node> decList = new ArrayList<>();
 		for (DecContext dec : c.dec()) decList.add(visit(dec));
 		Node n = null;
-		if (c.ID().size()>0) { //non-incomplete ST
+		if (!c.ID().isEmpty()) { //non-incomplete ST
 			n = new FunNode(c.ID(0).getText(),(TypeNode)visit(c.type(0)),parList,decList,visit(c.exp()));
 			n.setLine(c.FUN().getSymbol().getLine());
 		}
@@ -251,16 +254,20 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		if(print) printVarAndProdName(c); //c.ID().forEach(it -> System.out.println(it));
 		List<FieldNode> fields = new ArrayList<>();
 		List<MethodNode> methods = new ArrayList<>();
+		//class identifier all'ID 0
 		String id = c.ID(0).getText();
+		//tutti gli ID escluso lo 0 contengono le dichiarazioni dei parametri della classe
 		for (int i = 1; i < c.ID().size(); i++){
+			//tipo e nome del parametro
 			FieldNode fn = new FieldNode(c.ID(i).getText(), (TypeNode) visit(c.type(i - 1)));
 			fn.setLine(c.ID(i).getSymbol().getLine());
 			fields.add(fn);
 		}
+		//lista dei metodi dichiarati dalla classe
 		for(MethdecContext methdec : c.methdec()) methods.add((MethodNode) visit(methdec));
 
 		Node n = null;
-		if(c.ID().size() > 0){
+		if(!c.ID().isEmpty()){
 			n = new ClassNode(fields, methods, id);
 			n.setLine(c.CLASS().getSymbol().getLine());
 		}
@@ -271,9 +278,12 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	public Node visitMethdec(MethdecContext c){
 		if(print) printVarAndProdName(c);
 		List<ParNode> parList = new ArrayList<>();
+		//l'ID del metodo è il primo dichiarato
 		String id = c.ID(0).getText();
+		//Il tipo di ritorno è il primo tipo trovato
 		TypeNode retType = (TypeNode) visit(c.type(0));
 		for(int i = 1; i < c.ID().size(); i++){
+			//l'indice 0 è riservato alla dichiarazione del metodo, i restanti sono i parametri del metodo
 			ParNode parNode = new ParNode(c.ID(i).getText(), (TypeNode) visit(c.type(i)));
 			parNode.setLine(c.ID(i).getSymbol().getLine());
 			parList.add(parNode);
@@ -281,7 +291,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		List<Node> decList = new ArrayList<>();
 		for(DecContext dec : c.dec()) decList.add(visit(dec));
 		Node n = null;
-		if(c.ID().size() > 0){
+		if(!c.ID().isEmpty()){
 			n = new MethodNode(id, retType, parList, decList, visit(c.exp()));
 			n.setLine(c.FUN().getSymbol().getLine());
 		}
@@ -291,33 +301,33 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitNew(NewContext c){
 		if(print) printVarAndProdName(c);
+		//ID della classe su cui si fa new
 		String classId = c.ID().getText();
-		List<Node> argsExp = new ArrayList<>();
-		for(var argExp : c.exp()){argsExp.add(visit(argExp));}
-		Node n = new NewNode(classId, argsExp);
+		List<Node> args = new ArrayList<>();
+		//esploro ogni utilizzo dei parametri per inizializzare la classe
+		for(var arg : c.exp()){args.add(visit(arg));}
+		Node n = new NewNode(classId, args);
 		n.setLine(c.ID().getSymbol().getLine());
 		return n;
 	}
 
+	//chiamata al metodo
 	@Override
 	public Node visitClassCall(ClassCallContext c){
 		if(print) printVarAndProdName(c);
 
-		//mancano degli argomenti IDclasse . IDmetodo
+		//caso dove mancano degli argomenti IDclasse . IDmetodo
 		if(c.ID().size() != 2) return null;
 
 		String varName = c.ID(0).getText();
 		String methodName = c.ID(1).getText();
 
 		List<Node> args = new ArrayList<>();
+		//esploro ogni argomento dato al metodo
 		for(var exp : c.exp()) args.add(visit(exp));
-
 
 		Node n = new ClassCallNode(varName,methodName, args);
 		n.setLine(c.ID(1).getSymbol().getLine());
-
-		//System.out.println(n);
-
 		return n;
 	}
 
