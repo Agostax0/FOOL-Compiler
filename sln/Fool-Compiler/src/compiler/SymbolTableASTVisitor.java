@@ -273,7 +273,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 			STentry fieldEntry = new STentry(nestingLevel, uniqField.type, fieldsOffset--);
 
-			ctn.allFields.add(-fieldEntry.offset -1, fieldEntry.type); //il primo lo mette in posizione -1
+			ctn.allFields.add(-fieldEntry.offset -1, fieldEntry.type); //il primo lo mette in posizione 1
 
 			virtualTable.put(uniqField.id, fieldEntry);
 		}
@@ -370,11 +370,11 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 		STentry varEntry = stLookup(n.varName);
 
-		if(varEntry == null){
+		if(varEntry == null){ //controllo di usare una variabile presente nel nesting level corrente
 			System.out.println("Var or Par id " + n.varName + " at line "+ n.getLine() + " not declared");
 			stErrors++;
 		}
-		else {
+		else { //controllo che la variabile sia un oggetto di una classe
 			if(! (varEntry.type instanceof RefTypeNode)){
 				System.out.println("Var or Par id " + n.varName + " at line "+ n.getLine() + " is not a class");
 				stErrors++;
@@ -383,8 +383,8 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 				//method entry or param entry
 				var varClassTable = classTable.get(((RefTypeNode) varEntry.type).classID);
 
-				if(varClassTable == null){
-					System.out.println("Type of Var " + n.varName + " at line "+ n.getLine() + " is not a class");
+				if(varClassTable == null){ //controllo che abbia una class table, dovrebbe sempre averla
+					System.out.println("Type of Var " + n.varName + " at line "+ n.getLine() + " has no class table");
 					stErrors++;
 				}
 				else{
@@ -392,7 +392,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 					STentry methodEntry = varClassTable.get(n.methodName);
 
-					if(methodEntry == null){
+					if(methodEntry == null){ //controllo che la classe abbia quel metodo
 						System.out.println("Method id " + n.methodName + " at line " + n.getLine() + " not declared in class " + ((RefTypeNode) n.entry.type).classID);
 						stErrors++;
 					}
