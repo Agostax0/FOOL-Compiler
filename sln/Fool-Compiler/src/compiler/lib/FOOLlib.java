@@ -20,14 +20,6 @@ public class FOOLlib {
 
 	public static int typeErrors = 0;
 
-	// valuta se il tipo "a" e' <= al tipo "b", dove "a" e "b" sono tipi di base: IntTypeNode o BoolTypeNode
-	public static boolean isSubtype(TypeNode a, TypeNode b) {
-		return a.getClass().equals(b.getClass())
-				|| ((a instanceof BoolTypeNode) && (b instanceof IntTypeNode))
-				|| ((a instanceof EmptyTypeNode) && (b instanceof RefTypeNode))
-				|| ((a instanceof RefTypeNode) && (b instanceof EmptyTypeNode))
-				;
-	}
 
 	// crea un'unica stringa a partire da un insieme di stringhe concatenadole e 
 	// introducendo, all'interno, dei newline "\n" come separatore tra le stringhe

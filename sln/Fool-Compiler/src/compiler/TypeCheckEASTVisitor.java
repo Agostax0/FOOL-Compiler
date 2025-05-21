@@ -7,6 +7,7 @@ import compiler.lib.*;
 import java.lang.reflect.Type;
 import java.sql.Ref;
 
+import static compiler.TypeRels.isSubtype;
 import static compiler.lib.FOOLlib.*;
 
 //visitNode(n) fa il type checking di un Node n e ritorna:
@@ -190,7 +191,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		if ( !(at.parlist.size() == n.arglist.size()) )
 			throw new TypeException("Wrong number of parameters in the invocation of "+n.id,n.getLine());
 		for (int i = 0; i < n.arglist.size(); i++)
-			if ( !(FOOLlib.isSubtype(visit(n.arglist.get(i)),at.parlist.get(i))) )
+			if ( !(isSubtype(visit(n.arglist.get(i)),at.parlist.get(i))) )
 				throw new TypeException("Wrong type for "+(i+1)+"-th parameter in the invocation of "+n.id,n.getLine());
 		return at.ret;
 	}
@@ -322,7 +323,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 			var decElem = n.args.get(i);
 			var foundElem = ((ArrowTypeNode) m).parlist.get(i);
 
-			if( !(FOOLlib.isSubtype(visit(decElem), foundElem )) )
+			if( !(isSubtype(visit(decElem), foundElem )) )
 				throw new TypeException("Wrong type for "+decElem+"-th parameter in the invocation of "+n.methodName,n.getLine());
 		}
 
@@ -347,7 +348,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 			var decArg = decArgs.get(i);
 			var foundArg = decArgs.get(i);
 
-			if( !(FOOLlib.isSubtype(visit(decArg), visit(foundArg))))
+			if( !(isSubtype(visit(decArg), visit(foundArg))))
 				throw new TypeException("Wrong type for "+decArg+"-th parameter in the instantiation of "+n.classId,n.getLine());
 		}
 		return new RefTypeNode(n.classId);
