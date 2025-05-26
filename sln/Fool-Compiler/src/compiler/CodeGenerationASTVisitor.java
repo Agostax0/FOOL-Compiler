@@ -3,11 +3,11 @@ package compiler;
 import compiler.AST.*;
 import compiler.lib.*;
 import compiler.exc.*;
+import svm.ExecuteVM;
 
 import java.util.ArrayList;
 
 import static compiler.lib.FOOLlib.*;
-import static compiler.svm.ExecuteVM.MEMSIZE;
 
 public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidException> {
 
@@ -514,7 +514,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		 * contenuto indirizzo MEMSIZE + offset classe ID
 		 */
 		modHp = nlJoin(
-				"push " + (MEMSIZE + n.entry.offset),
+				"push " + (ExecuteVM.MEMSIZE + n.entry.offset),
 					   "lw" //scrivo ad HP il valore del push
 		);
 

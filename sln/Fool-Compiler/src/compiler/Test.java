@@ -5,10 +5,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import compiler.lib.*;
 import compiler.exc.*;
-//import compiler.svm.*;
-import compiler.visualsvm.*;
-import java.nio.file.*;
-
+import svm.*;
 public class Test {
     public static void main(String[] args) throws Exception {
    			
@@ -82,8 +79,8 @@ public class Test {
 
     	System.out.println("Running generated code via Stack Virtual Machine.");
 
-		//ExecuteVM vm = new ExecuteVM(parserASM.code);
-		ExecuteVM vm = new ExecuteVM(parserASM.code,parserASM.sourceMap,Files.readAllLines(Paths.get(fileName+".asm")));
+		ExecuteVM vm = new ExecuteVM(parserASM.code);
+		//ExecuteVM vm = new ExecuteVM(parserASM.code,parserASM.sourceMap,Files.readAllLines(Paths.get(fileName+".asm")));
     	vm.cpu();
     }
 }
