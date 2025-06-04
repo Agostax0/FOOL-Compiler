@@ -299,7 +299,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 					"stm", //lo uso per duplicarlo
 					"ltm", //lo carico
 					"ltm", //lo duplico
-					"lw", //nel caso del metodo
+					"lw", //nel caso del metodo prendo per deferenziazione il dispatch pointer per poi andare a prendere la dispatch table
 					"push"+n.entry.offset,
 					"add",
 					"lw",
