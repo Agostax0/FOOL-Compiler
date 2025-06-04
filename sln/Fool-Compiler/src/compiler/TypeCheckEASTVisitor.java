@@ -347,7 +347,9 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		for(int i = 0; i < decArgs.size(); i++){
 			var decArg = decArgs.get(i);
 			var foundArg = foundArgs.get(i);
-
+			// class X(x:int){}; => decArg: int
+			// var z: X = new X(true); => foundArg: bool
+			// type( bool <= int )
 			if( !(isSubtype(visit(foundArg), visit(decArg))))
 				throw new TypeException("Wrong type for "+decArg+"-th parameter in the instantiation of "+n.classId,n.getLine());
 		}
